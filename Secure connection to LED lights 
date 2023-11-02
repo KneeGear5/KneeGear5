@@ -1,0 +1,32 @@
+# Example Python code for secure communication with LED lights
+import socket
+import ssl
+
+def connect_to_led_lights(ip_address, port):
+    # Create a socket connection to the LED lights
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    # Secure the connection with SSL/TLS
+    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
+
+    secure_sock = context.wrap_socket(sock, server_hostname=ip_address)
+    
+    # Connect to the LED lights
+    secure_sock.connect((ip_address, port))
+
+    # Send and receive data securely
+    secure_sock.send(b"Turn on the lights")
+    response = secure_sock.recv(1024)
+    
+    # Close the connection
+    secure_sock.close()
+
+    return response
+
+# Example usage
+ip_address = "192.168.1.100"
+port = 8888
+response = connect_to_led_lights(ip_address, port)
+print("Response from LED lights:", response)
