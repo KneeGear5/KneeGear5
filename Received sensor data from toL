@@ -1,0 +1,11 @@
+import socket
+
+# Example to receive sensor data from an IoT device
+sensor_ip = "192.168.1.101"
+port = 5000
+
+with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+    s.bind((sensor_ip, port))
+    while True:
+        data, addr = s.recvfrom(1024)
+        print(f"Received sensor data: {data}")
